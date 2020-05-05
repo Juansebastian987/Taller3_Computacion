@@ -1,9 +1,12 @@
 package co.edu.icesi.fi.tics.tssc.dao;
 
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+
+import java.time.LocalDate;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -11,28 +14,35 @@ import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
+import co.edu.icesi.fi.tics.tssc.model.TsscGame;
+import co.edu.icesi.fi.tics.tssc.model.TsscStory;
 import co.edu.icesi.fi.tics.tssc.model.TsscTopic;
-import co.edu.icesi.fi.tics.tssc.service.TopicServiceImp;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@Rollback(false)
 class JUnitTopicDao {
 	
 	@Autowired
-	private ITopicDao topicServiceImp;
+	private ITopicDao iTopicDao;
 
+	@Autowired
+	private IGameDao iGameDao;
+	
 	private TsscTopic tsscTopic;
 	
 	@BeforeEach
 	public void setUp() {
 		tsscTopic = new TsscTopic();
-		tsscTopic.setId(10);
 		tsscTopic.setDefaultGroups(10);
 		tsscTopic.setDefaultSprints(10);
 		try {
-			topicServiceImp.saveTopic(tsscTopic);
+			iTopicDao.saveTopic(tsscTopic);
 		} catch (Exception e) {
 			fail();
 		}		
@@ -44,17 +54,25 @@ class JUnitTopicDao {
 	 */
 	@DisplayName("Test Integration Save Topic")
 	@Test
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public void testIntegrationSaveTopic() {
-		TsscTopic tsscTopic = new TsscTopic();
-		tsscTopic.setDefaultGroups(1);
-		tsscTopic.setDefaultSprints(1);
+		assertNotNull(iTopicDao);
+		iTopicDao.deleteAll();
 
+		TsscTopic tsscTopic = new TsscTopic();
+		tsscTopic.setName("TsscTopic");
+		tsscTopic.setDefaultGroups(10);
+		tsscTopic.setDefaultSprints(10);
+		tsscTopic.setDescription("Description");
+		
 		try {
-			topicServiceImp.saveTopic(tsscTopic);
-			assertNotNull(topicServiceImp.findById(tsscTopic.getId()));
+			iTopicDao.saveTopic(tsscTopic);
+			assertNotNull(iTopicDao.findById(tsscTopic.getId()).get(0));
+			assertEquals("Descripcion", iTopicDao.findById(tsscTopic.getId()));
 		} catch (Exception e) {
-			fail();
+			e.printStackTrace();
 		}
+		
 	}
 	
 	/**
@@ -62,21 +80,143 @@ class JUnitTopicDao {
 	 * @Test testIntegrationEditTopic
 	 * El test valida que se edita correctamente el Topic
 	 */
-	@DisplayName("Test Integration Edit Topic")
+	@DisplayName("Test Integration testIntegrationEditTopic")
 	@Test
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public void testIntegrationEditTopic() throws Exception {
-		TsscTopic tsscTopic1 = new TsscTopic();
-		tsscTopic1.setDefaultGroups(10);
-		tsscTopic1.setDefaultSprints(10);
-		tsscTopic1.setName("test1");
-				
-		topicServiceImp.saveTopic(tsscTopic1);
+		assertNotNull(iTopicDao);
+		iTopicDao.deleteAll();
+		
+		TsscTopic tsscTopic = new TsscTopic();
+		tsscTopic.setName("TsscTopic");
+		tsscTopic.setDefaultGroups(10);
+		tsscTopic.setDefaultSprints(10);
+		tsscTopic.setDescription("Description");
+		
+		TsscTopic tsscTopic2 = new TsscTopic();
+		tsscTopic2.setName("tsscTopic2");
+		tsscTopic2.setDefaultGroups(10);
+		tsscTopic2.setDefaultSprints(10);
+		tsscTopic2.setDescription("Description2");
+		
+		iTopicDao.saveTopic(tsscTopic2);
+		iTopicDao.editTopic(tsscTopic);
+
+		assertNotNull(iTopicDao.findByName("tsscTopic2"));
+		
+		iTopicDao.delete(tsscTopic);
+		
+	}
+	
+	@DisplayName("Test Integration delete")
+	@Test
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+	public void delete() {
+		assertNotNull(iTopicDao);
+		iTopicDao.deleteAll();
+		
+		TsscTopic tsscTopic = new TsscTopic();
+		tsscTopic.setName("TsscTopic");
+		tsscTopic.setDefaultGroups(10);
+		tsscTopic.setDefaultSprints(10);
+		tsscTopic.setDescription("Description");
+	
+		iTopicDao.delete(tsscTopic);
+		assertEquals(0, iTopicDao.findAll().size());
+	}
+	
+	@DisplayName("Test Integration findById")
+	@Test
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+	public void findById() {
+		assertNotNull(iTopicDao);
+		iTopicDao.deleteAll();
+
+		TsscTopic tsscTopic = new TsscTopic();
+		tsscTopic.setName("TsscTopic");
+		tsscTopic.setDefaultGroups(10);
+		tsscTopic.setDefaultSprints(10);
+		tsscTopic.setDescription("Description");
+			
+		try {
+			iTopicDao.saveTopic(tsscTopic);
+			assertNotEquals(0, iTopicDao.findById(tsscTopic.getId()).get(0));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
+		
+	}
+	
+	@DisplayName("Test Integration findByName")
+	@Test
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+	public void findByName() {
+		assertNotNull(iTopicDao);
+		iTopicDao.deleteAll();
+
+		TsscTopic tsscTopic = new TsscTopic();
+		tsscTopic.setName("TsscTopic");
+		tsscTopic.setDefaultGroups(10);
+		tsscTopic.setDefaultSprints(10);
+		tsscTopic.setDescription("Description");
 		
 		try {
-			topicServiceImp.editTopic(tsscTopic1);
-			assertNotNull(topicServiceImp.findById(tsscTopic1.getId()));
+			iTopicDao.saveTopic(tsscTopic);
+			assertNotEquals(0, iTopicDao.findByName("TsscTopic").get(0));
 		} catch (Exception e) {
-			fail();
+			e.printStackTrace();
 		}	
+		
 	}
+		
+	@DisplayName("Test Integration findByDescription")
+	@Test
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+	public void findByDescription() {
+		assertNotNull(iTopicDao);
+		iTopicDao.deleteAll();
+
+		TsscTopic tsscTopic = new TsscTopic();
+		tsscTopic.setName("TsscTopic");
+		tsscTopic.setDefaultGroups(10);
+		tsscTopic.setDefaultSprints(10);
+		tsscTopic.setDescription("Description");
+		
+		try {
+			iTopicDao.saveTopic(tsscTopic);
+			assertNotEquals(0, iTopicDao.findByDescription("Description").get(0));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	
+	}	
+	
+	@DisplayName("Test Integration findByDate")
+	@Test
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+	public void findByDate() {
+		assertNotNull(iTopicDao);
+		iTopicDao.deleteAll();
+
+		TsscTopic tsscTopic = new TsscTopic();
+		tsscTopic.setName("TsscTopic");
+		tsscTopic.setDefaultGroups(10);
+		tsscTopic.setDefaultSprints(10);
+		tsscTopic.setDescription("Description");
+		
+		TsscGame tsscGame = new TsscGame();
+		tsscGame.setName("tsscGame");
+		tsscGame.setNGroups(10);
+		tsscGame.setNSprints(10);
+		tsscGame.setScheduledDate(LocalDate.of(2020, 05, 05));
+		
+		try {
+			iGameDao.saveGame(tsscGame);
+			assertNotNull(iGameDao.findByDate(LocalDate.of(2020, 01, 01), LocalDate.of(2020, 12, 12)).get(0));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}	
+	
 }

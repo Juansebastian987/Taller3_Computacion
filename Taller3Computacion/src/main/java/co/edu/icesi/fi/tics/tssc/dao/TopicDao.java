@@ -34,6 +34,12 @@ public class TopicDao implements ITopicDao{
 	public void delete(TsscTopic del) {
 		entityManager.remove(del);
 	}
+	
+	@Override
+	public List<TsscTopic> findAll() {
+		String jpql = "Select a FROM TsscTopic a";
+		return entityManager.createQuery(jpql, TsscTopic.class).getResultList();
+	}
 
 	@Override
 	public List<TsscTopic> findById(long id) {
@@ -58,11 +64,9 @@ public class TopicDao implements ITopicDao{
 						"ORDER BY n.scheduleTime";	
 		return entityManager.createQuery(query).getResultList();
 	}
-
+	
 	@Override
-	public Iterable<TsscTopic> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+	public void deleteAll() {
+		entityManager.createQuery("DELETE From TsscTopic").executeUpdate();		
 	}
-
 }

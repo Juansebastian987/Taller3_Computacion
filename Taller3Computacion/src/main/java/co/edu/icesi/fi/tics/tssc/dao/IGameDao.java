@@ -14,11 +14,11 @@ public interface IGameDao {
 	public List<TsscGame> findById(long id);
 	public List<TsscGame> findByName(String name);
 	public List<TsscGame> findByDescription(String description);
-	public List<TsscGame> findByDate(LocalDate localDate);
+	public List<TsscGame> findByDate(LocalDate localDate, LocalDate localDate2);
 	public List<TsscGame> findByDateAndTimeRange(LocalDate localDate, LocalTime localTime);
-	public List<TsscGame> findByScheduledGame(LocalDate localDate);
-	public TsscGame saveGameTopic(TsscGame game, long id) throws Exception;
-	public TsscGame saveGameWithTopic(TsscGame tsscGame, long id) throws Exception;	
-	public Iterable<TsscGame> findAll();
+	public List<Object[]> findByScheduledGame(LocalDate localDate);
+	public List<TsscGame> dateChronometer(LocalDate localDate);
+	public void deleteAll();
+	public List<TsscGame> findAll();
 	
 }

@@ -1,8 +1,8 @@
 package co.edu.icesi.fi.tics.tssc.dao;
 
-
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.math.BigDecimal;
@@ -13,24 +13,24 @@ import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import co.edu.icesi.fi.tics.tssc.model.TsscGame;
 import co.edu.icesi.fi.tics.tssc.model.TsscStory;
-import co.edu.icesi.fi.tics.tssc.service.GameServiceImp;
-import co.edu.icesi.fi.tics.tssc.service.StoryServiceImp;
-
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@Rollback(false)
 class JUnitStoryDao {
 
 	@Autowired
-	private IStoryDao storyServiceImp;
+	private IStoryDao iStoryDao;
 
 	@Autowired
-	private IGameDao gameService;
+	private IGameDao iGameDao;
 
 	private TsscGame tsscGame;
 	
@@ -38,7 +38,6 @@ class JUnitStoryDao {
 
 	@Before
 	public void setUp() {
-
 		tsscStory = new TsscStory();
 		tsscStory.setId(10);
 		tsscStory.setInitialSprint(new BigDecimal(100));
@@ -50,12 +49,11 @@ class JUnitStoryDao {
 		tsscGame.setNSprints(10);
 
 		try {
-			gameService.saveGame(tsscGame);
-			storyServiceImp.saveStory(tsscStory);
+			iGameDao.saveGame(tsscGame);
+			iStoryDao.saveStory(tsscStory);
 		} catch (Exception e) {
 			fail();
 		}
-
 	}
 
 	/**
@@ -65,21 +63,21 @@ class JUnitStoryDao {
 	 */
 	@DisplayName("Test Integration Save Story")
 	@Test
-	@Transactional
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public void testIntegrationSaveStory() throws Exception {
+		assertNotNull(iStoryDao);
+		iStoryDao.deleteAll();
+
 		TsscStory tsscStory = new TsscStory();
-		tsscStory.setInitialSprint(new BigDecimal(100));
-		tsscStory.setBusinessValue(new BigDecimal(100));
-		tsscStory.setPriority(new BigDecimal(100));
+		tsscStory.setDescription("Descripcion");
 		
-		TsscGame tsscGame = new TsscGame();
-		tsscGame.setNGroups(100);
-		tsscGame.setNSprints(100);
-		
-		tsscStory.setTsscGame(tsscGame);
-		
-		storyServiceImp.saveStory(tsscStory);
-		assertNotNull(storyServiceImp.findById(tsscStory.getId()));
+		try {
+			iStoryDao.saveStory(tsscStory);
+			assertNotNull(iStoryDao.findById(tsscStory.getId()).get(0));
+			assertEquals("Descripcion", iStoryDao.findById(tsscStory.getId()).get(0).getAltDescripton());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -87,42 +85,76 @@ class JUnitStoryDao {
 	 * @Test testIntegrationEditStory
 	 * El test valida que se edita correctamente la Story
 	 */
-	@DisplayName("Test Integration Edit Story")
+	@DisplayName("Test Integration testIntegrationEditStory")
 	@Test
-	@Transactional
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public void testIntegrationEditStory() throws Exception {
+		assertNotNull(iStoryDao);
+		iStoryDao.deleteAll();
 		
-		TsscStory tsscStory1 = new TsscStory();
-		tsscStory1.setInitialSprint(new BigDecimal(100));
-		tsscStory1.setBusinessValue(new BigDecimal(100));
-		tsscStory1.setPriority(new BigDecimal(100));
+		TsscStory tsscStory = new TsscStory();
+		tsscStory.setDescription("Description1");
 		
 		TsscStory tsscStory2 = new TsscStory();
-		tsscStory2.setInitialSprint(new BigDecimal(100));
-		tsscStory2.setBusinessValue(new BigDecimal(100));
-		tsscStory2.setPriority(new BigDecimal(100));
+		tsscStory2.setDescription("Description2");
+
+		iStoryDao.saveStory(tsscStory2);
+		iStoryDao.editStory(tsscStory);
+
+		assertNotNull(iGameDao.findByName("Juego2"));
+		fail();
+		iStoryDao.delete(tsscStory);
 		
-		TsscGame tsscGame = new TsscGame();
-		tsscGame.setNGroups(100);
-		tsscGame.setNSprints(100);
-		
-		TsscGame tsscGame2 = new TsscGame();
-		tsscGame2.setNGroups(100);
-		tsscGame2.setNSprints(100);
-		
-		tsscStory1.setTsscGame(tsscGame);
-		tsscStory2.setTsscGame(tsscGame2);
-		
-		storyServiceImp.saveStory(tsscStory1);
-		storyServiceImp.saveStory(tsscStory2);
+	}
+	
+	@DisplayName("Test Integration delete")
+	@Test
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+	public void delete() {
+		assertNotNull(iStoryDao);
+		iStoryDao.deleteAll();
+
+		TsscStory tsscStory = new TsscStory();
+		tsscStory.setDescription("Description1");
 		
 		try {
-			storyServiceImp.editStory(tsscStory1);	
-			assertNotNull(storyServiceImp.findById(tsscStory1.getId()));
-			assertNotNull(storyServiceImp.findById(tsscStory2.getId()));
-		}catch(Exception e) {
-			fail();
+			iStoryDao.delete(tsscStory);
+			assertEquals(0, iStoryDao.findAll().size());
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+				
+	}
+	
+	@DisplayName("Test Integration findById")
+	@Test
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+	public void findById() {
+		assertNotNull(iStoryDao);
+		iStoryDao.deleteAll();
+
+		TsscStory tsscStory = new TsscStory();
+		tsscStory.setDescription("Description1");
+
+		try {
+			iStoryDao.saveStory(tsscStory);
+			assertNotEquals(0, iStoryDao.findById(tsscStory.getId()).get(0));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
 	}
 
+	@DisplayName("Test Integration deleteAll")
+	@Test
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+	public void deleteAll() {
+		assertNotNull(iStoryDao);
+		iStoryDao.deleteAll();
+		
+		TsscStory tsscStory = new TsscStory();
+		tsscStory.setDescription("Description1");
+
+		iStoryDao.delete(tsscStory);
+		assertEquals(0, iStoryDao.findAll().size());
+	}
 }

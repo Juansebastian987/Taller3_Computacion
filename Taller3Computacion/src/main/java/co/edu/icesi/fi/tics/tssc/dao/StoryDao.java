@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 
 import co.edu.icesi.fi.tics.tssc.model.TsscStory;
+import co.edu.icesi.fi.tics.tssc.model.TsscTopic;
 
 @Repository
 @Scope("singleton")
@@ -36,11 +37,16 @@ public class StoryDao implements IStoryDao {
 	public List<TsscStory> findById(long id) {
 		return (List<TsscStory>) entityManager.find(TsscStory.class, id);
 	}
-
+	
 	@Override
-	public Iterable<TsscStory> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+	public void deleteAll() {
+		entityManager.createQuery("DELETE From TsscStory").executeUpdate();		
+	}
+	
+	@Override
+	public List<TsscStory> findAll() {
+		String jpql = "Select a FROM TsscStory a";
+		return entityManager.createQuery(jpql, TsscStory.class).getResultList();
 	}
 
 }

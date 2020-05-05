@@ -15,6 +15,7 @@ public interface ITopicDao {
 	public List<TsscTopic> findByName(String name);
 	public List<TsscTopic> findByDescription(String description);
 	public List<TsscTopic> findByDate(LocalDate localDate);
-	public Iterable<TsscTopic> findAll();
+	public List<TsscTopic> findAll();
+	public void deleteAll();
 
 }
