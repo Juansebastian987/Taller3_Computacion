@@ -52,7 +52,7 @@ class JUnitTopicDao {
 	 * @Test testIntegrationSaveTopic
 	 * El test valida que se guarda correctamente el Topic
 	 */
-	@DisplayName("Test Integration Save Topic")
+	@DisplayName("Test Dao Save Topic")
 	@Test
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public void testIntegrationSaveTopic() {
@@ -80,7 +80,7 @@ class JUnitTopicDao {
 	 * @Test testIntegrationEditTopic
 	 * El test valida que se edita correctamente el Topic
 	 */
-	@DisplayName("Test Integration testIntegrationEditTopic")
+	@DisplayName("Test Dao Edit Topic")
 	@Test
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public void testIntegrationEditTopic() throws Exception {
@@ -108,7 +108,11 @@ class JUnitTopicDao {
 		
 	}
 	
-	@DisplayName("Test Integration delete")
+	/**
+	 * @Test delete
+	 * El test valida que se elimine un Topic correctamente
+	 */
+	@DisplayName("Test Dao One delete")
 	@Test
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public void delete() {
@@ -125,7 +129,11 @@ class JUnitTopicDao {
 		assertEquals(0, iTopicDao.findAll().size());
 	}
 	
-	@DisplayName("Test Integration findById")
+	/**
+	 * @Test findById
+	 * El test valida que se encuentre un Topic por su ID
+	 */
+	@DisplayName("Test Dao findById")
 	@Test
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public void findById() {
@@ -147,7 +155,11 @@ class JUnitTopicDao {
 		
 	}
 	
-	@DisplayName("Test Integration findByName")
+	/**
+	 * @Test findByName
+	 * El test valida que se encuentre un Topic por su Nombre
+	 */
+	@DisplayName("Test Dao findByName")
 	@Test
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public void findByName() {
@@ -169,7 +181,11 @@ class JUnitTopicDao {
 		
 	}
 		
-	@DisplayName("Test Integration findByDescription")
+	/**
+	 * @Test findByDescription
+	 * El test valida que se encuentre un Topic por su Descripción
+	 */
+	@DisplayName("Test Dao findByDescription")
 	@Test
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public void findByDescription() {
@@ -191,7 +207,11 @@ class JUnitTopicDao {
 	
 	}	
 	
-	@DisplayName("Test Integration findByDate")
+	/**
+	 * @Test findByDate
+	 * El test valida que se encuentre un Topic por su Fecha
+	 */
+	@DisplayName("Test Dao findByDate")
 	@Test
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public void findByDate() {

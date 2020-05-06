@@ -14,8 +14,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +24,8 @@ import co.edu.icesi.fi.tics.tssc.model.TsscGame;
 import co.edu.icesi.fi.tics.tssc.model.TsscStory;
 import co.edu.icesi.fi.tics.tssc.model.TsscTopic;
 @RunWith(SpringRunner.class)
-@SpringBootTest
+//@SpringBootTest
+@ContextConfiguration("/applicationContext.xml")
 @Rollback(false)
 class JUnitGameDao {
 
@@ -62,10 +63,10 @@ class JUnitGameDao {
 	}
 
 	/**
-	 * @Test testIntegrationEditGame
+	 * @Test testIntegrationSaveGame
 	 * El test valida que se guarda correctamente el Game
 	 */
-	@DisplayName("Test Integration Save Game")
+	@DisplayName("Test Dao Save Game")
 	@Test
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public void testIntegrationSaveGame() {
@@ -90,11 +91,10 @@ class JUnitGameDao {
 	}
 	
 	/**
-	 * @throws Exception 
 	 * @Test testIntegrationEditGame
 	 * El test valida que se edita correctamente el Game
 	 */
-	@DisplayName("Test Integration Edit Game")
+	@DisplayName("Test Dao Edit Game")
 	@Test
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public void testIntegrationEditGame() throws Exception {
@@ -123,7 +123,11 @@ class JUnitGameDao {
 	}
 	
 
-	@DisplayName("Test Integration Delete")
+	/**
+	 * @Test delete
+	 * El test valida que se elimina correctamente el Game
+	 */
+	@DisplayName("Test Dao Delete")
 	@Test
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public void delete() {
@@ -142,7 +146,11 @@ class JUnitGameDao {
 		assertEquals(0, iGameDao.findAll().size());
 	}
 	
-	@DisplayName("Test Integration FindById")
+	/**
+	 * @Test findById
+	 * El test valida que se encuentra correctamente el Game por su Id
+	 */
+	@DisplayName("Test Dao FindById")
 	@Test
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public void findById() {
@@ -166,7 +174,11 @@ class JUnitGameDao {
 		
 	}
 	
-	@DisplayName("Test Integration findByName")
+	/**
+	 * @Test findByName
+	 * El test valida que se encuentra correctamente el Game por su Nombre
+	 */
+	@DisplayName("Test Dao findByName")
 	@Test
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public void findByName() {
@@ -190,7 +202,11 @@ class JUnitGameDao {
 
 	}
 	
-	@DisplayName("Test Integration findByDescription")
+	/**
+	 * @Test findByDescription
+	 * El test valida que se encuentra correctamente el Game por su Descripción
+	 */
+	@DisplayName("Test Dao findByDescription")
 	@Test
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public void findByDescription() {
@@ -216,7 +232,11 @@ class JUnitGameDao {
 		}
 	}
 	
-	@DisplayName("Test Integration findByDate")
+	/**
+	 * @Test findByDate
+	 * El test valida que se encuentra correctamente el Game por su Fecha
+	 */
+	@DisplayName("Test Dao findByDate")
 	@Test
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public void findByDate() {
@@ -240,7 +260,12 @@ class JUnitGameDao {
 		}
 	}
 	
-	@DisplayName("Test Integration findByDateAndTimeRange")
+	/**
+	 * @Test findByDateAndTimeRange
+	 * El test valida que se pueda permitir que los juegos puedan buscarse por rango de 
+	 * fecha o por la combinación de una fecha y rango de horas.
+	 */
+	@DisplayName("Test Dao findByDateAndTimeRange")
 	@Test
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public void findByDateAndTimeRange() {
@@ -264,7 +289,13 @@ class JUnitGameDao {
 		}
 	}
 	
-	@DisplayName("Test Integration DateChronometer")
+
+	/**
+	 * @Test dateChronometer
+	 * El test valida que muestra los juegos que están programados para una fecha pero tienen menos de 
+	 * diez historias asociadas para una fecha dada o no tienen al menos un cronómetro especificado.
+	 */
+	@DisplayName("Test Dao DateChronometer")
 	@Test
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public void dateChronometer() {
@@ -284,9 +315,17 @@ class JUnitGameDao {
 			assertNotNull(iGameDao.dateChronometer(LocalDate.of(2020, 05, 05)).get(0));
 		} catch (Exception e) {
 			e.printStackTrace();
-		}	}
+		}	
+		
+	}
 	
-	@DisplayName("Test Integration findByScheduledGame")
+	
+	/**
+	 * @Test findByScheduledGame
+	 * El test valida que se encuentra el game que están programados para una fecha pero tienen menos de diez 
+	 * historias asociadas para una fecha dada
+	 */
+	@DisplayName("Test Dao findByScheduledGame")
 	@Test
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public void findByScheduledGame() {
@@ -309,7 +348,12 @@ class JUnitGameDao {
 		}
 	}
 		
-	@DisplayName("Test Integration deleteAll")
+	
+	/**
+	 * @Test deleteAll
+	 * El test valida que se elimine todos los Games correctamente
+	 */
+	@DisplayName("Test Dao deleteAll")
 	@Test
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public void deleteAll() {

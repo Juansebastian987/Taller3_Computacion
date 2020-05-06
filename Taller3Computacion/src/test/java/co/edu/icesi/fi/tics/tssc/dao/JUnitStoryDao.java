@@ -61,7 +61,7 @@ class JUnitStoryDao {
 	 * @Test testIntegrationSaveStory
 	 * El test valida que se guarda correctamente la Story
 	 */
-	@DisplayName("Test Integration Save Story")
+	@DisplayName("Test Dao Save Story")
 	@Test
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public void testIntegrationSaveStory() throws Exception {
@@ -85,7 +85,7 @@ class JUnitStoryDao {
 	 * @Test testIntegrationEditStory
 	 * El test valida que se edita correctamente la Story
 	 */
-	@DisplayName("Test Integration testIntegrationEditStory")
+	@DisplayName("Test Dao Edit Story")
 	@Test
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public void testIntegrationEditStory() throws Exception {
@@ -101,13 +101,16 @@ class JUnitStoryDao {
 		iStoryDao.saveStory(tsscStory2);
 		iStoryDao.editStory(tsscStory);
 
-		assertNotNull(iGameDao.findByName("Juego2"));
-		fail();
+		assertNotNull(iGameDao.findByName("Description2"));
 		iStoryDao.delete(tsscStory);
 		
 	}
 	
-	@DisplayName("Test Integration delete")
+	/**
+	 * @Test delete
+	 * El test valida que se elimina una Story correctamente
+	 */
+	@DisplayName("Test Dao One delete")
 	@Test
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public void delete() {
@@ -126,7 +129,11 @@ class JUnitStoryDao {
 				
 	}
 	
-	@DisplayName("Test Integration findById")
+	/**
+	 * @Test findById
+	 * El test valida que se encuentra una Story por su ID
+	 */
+	@DisplayName("Test Dao findById")
 	@Test
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public void findById() {
@@ -144,7 +151,11 @@ class JUnitStoryDao {
 		}	
 	}
 
-	@DisplayName("Test Integration deleteAll")
+	/**
+	 * @Test deleteAll
+	 * El test valida que se eliminen todas las Stories correctamente
+	 */
+	@DisplayName("Test Dao deleteAll")
 	@Test
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public void deleteAll() {
