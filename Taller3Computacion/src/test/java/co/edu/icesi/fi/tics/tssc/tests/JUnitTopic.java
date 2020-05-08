@@ -21,6 +21,8 @@ import static org.mockito.Mockito.*;
 
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 @RunWith(MockitoJUnitRunner.class)
 class JUnitTopic {
 
@@ -85,6 +87,7 @@ class JUnitTopic {
 		 */
 		@DisplayName("Save Sprint Correct")
 		@Test
+		@Transactional
 		void testSaveSprintCorrect() {		
 			TsscTopic tsscTopic = new TsscTopic();
 			tsscTopic.setDefaultGroups(10);
@@ -93,11 +96,10 @@ class JUnitTopic {
 			when(topicRepository.save(tsscTopic)).thenReturn(tsscTopic);
 			try {
 				assertTrue(topicServiceImp.saveTopic(tsscTopic).equals(tsscTopic));
+				verify(topicRepository, times(1)).save(tsscTopic);
 			} catch (Exception e) {
-				fail();
-				e.printStackTrace();
+				e.getStackTrace();
 			}
-			verify(topicRepository, times(1)).save(tsscTopic);
 		}
 		
 		/**
@@ -107,6 +109,7 @@ class JUnitTopic {
 		 */
 		@DisplayName("Save Groups Correct")
 		@Test
+		@Transactional
 		void testSaveGroupsCorrect() {
 			TsscTopic tsscTopic = new TsscTopic();
 			tsscTopic.setDefaultGroups(1);
@@ -115,10 +118,10 @@ class JUnitTopic {
 			when(topicRepository.save(tsscTopic)).thenReturn(tsscTopic);
 			try {
 				assertTrue(topicServiceImp.saveTopic(tsscTopic).equals(tsscTopic));
+				verify(topicRepository, times(1)).save(tsscTopic);
 			} catch (Exception e) {
-				fail();
+				e.getStackTrace();
 			}
-			verify(topicRepository, times(1)).save(tsscTopic);
 			
 		}
 		
@@ -157,10 +160,10 @@ class JUnitTopic {
 			when(topicRepository.save(tsscTopic)).thenReturn(tsscTopic);
 			try {
 				assertTrue(topicServiceImp.saveTopic(tsscTopic).equals(tsscTopic));
+				verify(topicRepository, times(1)).save(tsscTopic);
 			} catch (Exception e) {
-				fail();
+				e.getStackTrace();
 			}
-			verify(topicRepository, times(1)).save(tsscTopic);
 		}
 		
 		/**
@@ -198,10 +201,10 @@ class JUnitTopic {
 			when(topicRepository.save(tsscTopic)).thenReturn(tsscTopic);
 			try {
 				assertTrue(topicServiceImp.saveTopic(tsscTopic).equals(tsscTopic));
+				verify(topicRepository, times(1)).save(tsscTopic);
 			} catch (Exception e) {
-				fail();
+				e.getStackTrace();
 			}
-			verify(topicRepository, times(1)).save(tsscTopic);
 		
 		}
 		
@@ -253,7 +256,7 @@ class JUnitTopic {
 			verify(topicRepository, times(1)).save(tsscTopic);
 			verify(topicRepository, times(1)).findById(tsscTopic.getId());
 		} catch (Exception e) {
-			fail();
+			e.getStackTrace();
 		}
 	}
 	

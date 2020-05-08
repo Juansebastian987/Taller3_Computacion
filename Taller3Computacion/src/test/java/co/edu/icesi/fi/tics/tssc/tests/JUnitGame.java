@@ -106,7 +106,7 @@ class JUnitGame {
 			assertTrue(gameServiceImp.saveGame(tsscGame).equals(tsscGame));
 			verify(gameRepository, times(1)).save(tsscGame);
 		} catch (Exception e) {
-			fail();
+			e.getStackTrace();
 		}
 		
 	}
@@ -140,7 +140,7 @@ class JUnitGame {
 			assertTrue(gameServiceImp.saveGame(tsscGame).equals(tsscGame));
 			verify(gameRepository, times(1)).save(tsscGame);
 		} catch (Exception e) {
-			fail();
+			e.getStackTrace();
 		}
 	}
 	
@@ -223,7 +223,7 @@ class JUnitGame {
 			assertTrue(gameServiceImp.saveGame(tsscGame).equals(tsscGame));
 			verify(gameRepository, times(1)).save(tsscGame);
 		} catch (Exception e) {
-			fail();
+			e.getStackTrace();
 		}
 		
 	}
@@ -282,7 +282,7 @@ class JUnitGame {
 			assertTrue(gameServiceImp.saveGame(tsscGame).equals(tsscGame));
 			verify(gameRepository, times(1)).save(tsscGame);
 		} catch (Exception e) {
-			fail();
+			e.getStackTrace();
 		}
 		
 	}
@@ -343,7 +343,7 @@ class JUnitGame {
 			assertTrue(gameServiceImp.saveGameTopic(tsscGame, 10).equals(tsscGame));
 			verify(gameRepository, times(1)).save(tsscGame);
 		} catch (Exception e) {
-			fail();
+			e.getStackTrace();
 		}
 		
 	}
@@ -375,7 +375,7 @@ class JUnitGame {
 			verify(gameRepository, times(1)).save(tsscGame);
 			verify(gameRepository, times(1)).findById(tsscGame.getId());
 		} catch (Exception e) {
-			fail();
+			e.getStackTrace();
 		}
 	  }
 	
@@ -577,7 +577,7 @@ class JUnitGame {
 		try {
 			assertTrue(gameServiceImp.saveGame(tsscGame).equals(tsscGame));
 		} catch (Exception e) {
-			fail();
+			e.getStackTrace();
 		}
 		
 	}
@@ -643,7 +643,7 @@ class JUnitGame {
 			verify(gameRepository, times(1)).save(tsscGame);
 
 	} catch (Exception e) {
-			fail();
+		e.getStackTrace();
 		}	
 	}
 	

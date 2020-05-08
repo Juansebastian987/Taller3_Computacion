@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import co.edu.icesi.fi.tics.tssc.dao.IStoryDao;
 import co.edu.icesi.fi.tics.tssc.model.TsscStory;
 import co.edu.icesi.fi.tics.tssc.repository.IStoryRepository;
 
@@ -14,13 +15,13 @@ public class StoryServiceImp implements IStoryService {
 
 
 	@Autowired
-	public IStoryRepository storyRepository;
+	public IStoryDao storyDao;
 	
 	@Override
 	public TsscStory saveStory(TsscStory story, long id) throws Exception {
 		if (story != null) {
 			if(story.getTsscGame().getNGroups() >0 && story.getTsscGame().getNSprints() >0) {
-						storyRepository.save(story);								
+					storyDao.save(story);								
 				}
 		}
 		else if(story.getClass()==null) {
@@ -48,8 +49,8 @@ public class StoryServiceImp implements IStoryService {
 		if(story.getTsscGame().getNGroups() >0 && story.getTsscGame().getNSprints() >0) {	
 			if(story.getClass()==null) {
 				throw new Exception("El objeto al cual estas accediendo no existe");
-			}else if(storyRepository.findById(story.getId()).get()!=null){
-				storyRepository.save(story);			
+			}else if(storyDao.findById(story.getId()).get((int) id)!=null){
+				storyDao.save(story);			
 			}			
 		}
 		else if(story.getClass()==null) {
@@ -73,17 +74,17 @@ public class StoryServiceImp implements IStoryService {
 
 	@Override
 	public Iterable<TsscStory> findAll() {
-		return storyRepository.findAll();
+		return storyDao.findAll();
 	}
 
 	@Override
 	public void delete(TsscStory del) {
-		storyRepository.delete(del);
+		storyDao.delete(del);
 	}
 
 	@Override
 	public Optional<TsscStory> findById(long id) {
-		return storyRepository.findById(id);
+		return null;
 	}
 
 }

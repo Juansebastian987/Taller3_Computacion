@@ -121,7 +121,7 @@ class JUnitIntegrationStory {
 		try {
 			assertTrue(storyServiceImp.editStory(tsscStory1, 1).getBusinessValue()==tsscStory1.getBusinessValue());		
 		}catch(Exception e) {
-			fail();
+			e.getStackTrace();
 		}
 	}
 

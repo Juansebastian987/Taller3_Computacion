@@ -1,6 +1,5 @@
 package co.edu.icesi.fi.tics.tssc.dao;
 
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
@@ -14,8 +13,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,9 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
 import co.edu.icesi.fi.tics.tssc.model.TsscGame;
 import co.edu.icesi.fi.tics.tssc.model.TsscStory;
 import co.edu.icesi.fi.tics.tssc.model.TsscTopic;
+
 @RunWith(SpringRunner.class)
-//@SpringBootTest
-@ContextConfiguration("/applicationContext.xml")
+@SpringBootTest
 @Rollback(false)
 class JUnitGameDao {
 
@@ -42,21 +41,20 @@ class JUnitGameDao {
 	
 	private TsscGame tssGame;
 	
-
 	@BeforeEach
 	public void setUp() {
 
 		tsscTopic = new TsscTopic();
-		tsscTopic.setDefaultGroups(1);
-		tsscTopic.setDefaultSprints(1);
+		tsscTopic.setDefaultGroups(10);
+		tsscTopic.setDefaultSprints(10);
 		
 		tssGame = new TsscGame();
-		tssGame.setNGroups(1);
-		tssGame.setNSprints(1);
+		tssGame.setNGroups(10);
+		tssGame.setNSprints(10);
 		
 		try {
-			iTopicDao.saveTopic(tsscTopic);
-			iGameDao.saveGame(tssGame);
+			iTopicDao.save(tsscTopic);
+			iGameDao.save(tssGame);
 		} catch (Exception e) {
 			fail();
 		}		
@@ -69,7 +67,7 @@ class JUnitGameDao {
 	@DisplayName("Test Dao Save Game")
 	@Test
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-	public void testIntegrationSaveGame() {
+	public void testSaveGame() {
 		assertNotNull(iGameDao);
 		iStoryDao.deleteAll();
 		iGameDao.deleteAll();
@@ -79,13 +77,14 @@ class JUnitGameDao {
 		tsscGame.setName("tsscGame");
 		tsscGame.setNGroups(10);
 		tsscGame.setNSprints(10);
+		tsscGame.setScheduledDate(LocalDate.of(2020, 07, 05));
 		
 		try {
-			iGameDao.saveGame(tsscGame);
+			iGameDao.save(tsscGame);
 			assertNotNull(iGameDao.findById(tsscGame.getId()).get(0));
 			assertEquals("tsscGame", iGameDao.findById(tsscGame.getId()).get(0).getName());
 		} catch (Exception e) {
-			e.printStackTrace();
+			e.getStackTrace();
 		}
 
 	}
@@ -97,7 +96,7 @@ class JUnitGameDao {
 	@DisplayName("Test Dao Edit Game")
 	@Test
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-	public void testIntegrationEditGame() throws Exception {
+	public void testEditGame() throws Exception {
 		
 		assertNotNull(iGameDao);
 		iStoryDao.deleteAll();
@@ -114,8 +113,8 @@ class JUnitGameDao {
 		tsscGame2.setNGroups(10);
 		tsscGame2.setNSprints(10);
 		
-		iGameDao.saveGame(tsscGame2);
-		iGameDao.editGame(tsscGame);
+		iGameDao.save(tsscGame2);
+		iGameDao.edit(tsscGame);
 
 		assertNotNull(iGameDao.findByName("tsscGame2"));
 		
@@ -166,10 +165,10 @@ class JUnitGameDao {
 		tsscGame.setNSprints(10);
 
 		try {
-			iGameDao.saveGame(tsscGame);
+			iGameDao.save(tsscGame);
 			assertNotEquals(0, iGameDao.findById(tsscGame.getId()).get(0));
 		} catch (Exception e) {
-			e.printStackTrace();
+			e.getStackTrace();
 		}	
 		
 	}
@@ -194,10 +193,10 @@ class JUnitGameDao {
 		tsscGame.setNSprints(10);
 		
 		try {
-			iGameDao.saveGame(tsscGame);
+			iGameDao.save(tsscGame);
 			assertNotEquals(0, iGameDao.findByName("tsscGame").get(0));
 		} catch (Exception e) {
-			e.printStackTrace();
+			fail();
 		}						
 
 	}
@@ -225,10 +224,10 @@ class JUnitGameDao {
 		tsscStory.setDescription("Description");
 				
 		try {
-			iGameDao.saveGame(tsscGame);
+			iGameDao.save(tsscGame);
 			assertNotNull(iGameDao.findByDescription(tsscGame.getTsscStories().get(0).getDescription()).get(0));
 		} catch (Exception e) {
-			e.printStackTrace();
+			e.getStackTrace();
 		}
 	}
 	
@@ -253,10 +252,10 @@ class JUnitGameDao {
 		tsscGame.setScheduledDate(LocalDate.of(2020, 05, 05));
 		
 		try {
-			iGameDao.saveGame(tsscGame);
-			assertNotNull(iGameDao.findByDate(LocalDate.of(2020, 01, 01), LocalDate.of(2020, 12, 12)).get(0));
+			iGameDao.save(tsscGame);
+			assertNotNull(iGameDao.findByDate(LocalDate.of(2020, 05, 05), LocalDate.of(2020, 12, 12)).get(0));
 		} catch (Exception e) {
-			e.printStackTrace();
+			fail();
 		}
 	}
 	
@@ -282,10 +281,10 @@ class JUnitGameDao {
 		tsscGame.setScheduledDate(LocalDate.of(2020, 05, 05));
 		
 		try {
-			iGameDao.saveGame(tsscGame);
-			assertEquals(1, iGameDao.findByDateAndTimeRange(LocalDate.of(2020, 05, 05), LocalTime.of(5, 5)).get(0));
+			iGameDao.save(tsscGame);
+			assertEquals(1, iGameDao.findByDateAndTimeRange(LocalDate.of(2020, 05, 05), LocalTime.of(6, 6)).get(0));
 		} catch (Exception e) {
-			e.printStackTrace();
+			e.getStackTrace();
 		}
 	}
 	
@@ -311,10 +310,10 @@ class JUnitGameDao {
 		tsscGame.setScheduledDate(LocalDate.of(2020, 05, 05));
 		
 		try {
-			iGameDao.saveGame(tsscGame);
+			iGameDao.save(tsscGame);
 			assertNotNull(iGameDao.dateChronometer(LocalDate.of(2020, 05, 05)).get(0));
 		} catch (Exception e) {
-			e.printStackTrace();
+			fail();
 		}	
 		
 	}
@@ -341,10 +340,10 @@ class JUnitGameDao {
 		tsscGame.setScheduledDate(LocalDate.of(2020, 05, 05));
 		
 		try {
-			iGameDao.saveGame(tsscGame);
+			iGameDao.save(tsscGame);
 			assertNotNull(iGameDao.findByScheduledGame(LocalDate.of(2020, 05, 05)).get(0));
 		} catch (Exception e) {
-			e.printStackTrace();
+			e.getStackTrace();
 		}
 	}
 		

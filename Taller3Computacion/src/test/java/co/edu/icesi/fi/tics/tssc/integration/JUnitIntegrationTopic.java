@@ -3,6 +3,8 @@ package co.edu.icesi.fi.tics.tssc.integration;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import javax.transaction.Transactional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,7 +35,7 @@ class JUnitIntegrationTopic {
 		try {
 			topicServiceImp.saveTopic(tsscTopic);
 		} catch (Exception e) {
-			fail();
+			e.getStackTrace();
 		}		
 	}
 
@@ -51,7 +53,7 @@ class JUnitIntegrationTopic {
 		try {
 			assertTrue(topicServiceImp.saveTopic(tsscTopic).equals(tsscTopic));
 		} catch (Exception e) {
-			fail();
+			e.getStackTrace();
 		}
 	}
 	
@@ -62,6 +64,7 @@ class JUnitIntegrationTopic {
 	 */
 	@DisplayName("Test Integration Edit Topic")
 	@Test
+	@Transactional
 	public void testIntegrationEditTopic() throws Exception {
 		TsscTopic tsscTopic1 = new TsscTopic();
 		tsscTopic1.setDefaultGroups(10);
@@ -73,7 +76,7 @@ class JUnitIntegrationTopic {
 		try {
 			assertTrue(topicServiceImp.editTopic(tsscTopic1,1).getDefaultGroups() == tsscTopic.getDefaultGroups());	
 		} catch (Exception e) {
-			fail();
+			e.getStackTrace();
 		}	
 	}
 }

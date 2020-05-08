@@ -1,10 +1,13 @@
 package co.edu.icesi.fi.tics.tssc.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import co.edu.icesi.fi.tics.tssc.dao.IGameDao;
+import co.edu.icesi.fi.tics.tssc.dao.ITopicDao;
 import co.edu.icesi.fi.tics.tssc.model.TsscGame;
 import co.edu.icesi.fi.tics.tssc.model.TsscTopic;
 import co.edu.icesi.fi.tics.tssc.repository.IGameRepository;
@@ -13,16 +16,16 @@ import co.edu.icesi.fi.tics.tssc.repository.ITopicRepository;
 @Service
 public class GameServiceImp implements IGameService{
 	@Autowired
-	public IGameRepository gameRepository ;
+	public IGameDao gameDao ;
 	
 	@Autowired
-	public ITopicRepository topicRepository;
+	public ITopicDao topicRepository;
 	
 
 	@Override
 	public TsscGame saveGame(TsscGame tsscGame) throws Exception {
 		if(tsscGame.getNGroups() >0 && tsscGame.getNSprints() >0) {		
-					gameRepository.save(tsscGame);									
+			gameDao.save(tsscGame);									
 		}
 		else if(tsscGame.getNGroups() < 0) {
 			throw new Exception("La cantidad de grupos debe ser mayor a cero.");
@@ -47,14 +50,14 @@ public class GameServiceImp implements IGameService{
 		if(tsscGame.getNGroups() >0 && tsscGame.getNSprints() >0) {	
 			if(tsscGame.getClass()==null) {
 				throw new Exception("El objeto al cual estas accediendo no existe");
-			}else if(gameRepository.findById( tsscGame.getId()).get()!=null){
-				gameRepository.save(tsscGame);			
+			}else if(gameDao.findById( tsscGame.getId()).get((int)id)!=null){
+				gameDao.save(tsscGame);			
 			}			
 		}
 		else if(tsscGame.getName()==null) {
 			throw new Exception("El objeto esta nulo");
 		}
-		else if(gameRepository.findById( tsscGame.getId()).get().getClass()==null) {
+		else if(gameDao.findById( tsscGame.getId()).get((int)id).getClass()==null) {
 			throw new Exception("El objeto con esa id no existe");
 		}
 		else if(tsscGame.getNGroups() < 0) {
@@ -83,7 +86,7 @@ public class GameServiceImp implements IGameService{
 				if (topicRepository.findById( id)==null) {
 					throw new Exception("El Topic es nulo");		
 				} 
-				gameRepository.save(game);				
+				gameDao.save(game);				
 			}			
 		}	
 		else if(game.getTsscTopic()==null) {
@@ -154,10 +157,10 @@ public class GameServiceImp implements IGameService{
 		if(tsscGame.getNGroups() >0 && tsscGame.getNSprints() >0) {	
 			if(tsscGame.getClass()==null || tsscGame==null) {
 				throw new Exception("El objeto al cual estas accediendo no existe");
-			}else if(topicRepository.findById(id).get()!=null){
+			}else if(topicRepository.findById(id).get((int)id)!=null){
 				
-				Optional<TsscTopic> optional  = topicRepository.findById(id);
-				TsscTopic topic = optional.get();
+				List<TsscTopic> optional  = topicRepository.findById((int)id);
+				TsscTopic topic = optional.get((int)id);
 				
 				if(topic.getDefaultGroups() > 0 && topic.getDefaultSprints()>0) {
 					tsscGame.setNGroups( (int) topic.getDefaultGroups());
@@ -166,7 +169,7 @@ public class GameServiceImp implements IGameService{
 					tsscGame.setTsscStories(topic.getTsscStories());
 					tsscGame.setTsscTimecontrol(topic.getTsscTimecontrol());
 					
-					gameRepository.save(tsscGame);
+					gameDao.save(tsscGame);
 				}else {
 					throw new Exception("El Topic tiene el grupo y sprint menos  a 0");
 				}
@@ -174,7 +177,7 @@ public class GameServiceImp implements IGameService{
 				return tsscGame;
 			}			
 		}
-		else if(topicRepository.findById( tsscGame.getId()).get().getClass()==null) {
+		else if(topicRepository.findById( tsscGame.getId()).get((int) id).getClass()==null) {
 			throw new Exception("El objeto con esa id no existe");
 		}
 		else if(tsscGame.getNGroups() < 0) {
@@ -194,16 +197,16 @@ public class GameServiceImp implements IGameService{
 
 	@Override
 	public Iterable<TsscGame> findAll() {
-		return gameRepository.findAll();
+		return gameDao.findAll();
 	}
 
 	@Override
 	public void delete(TsscGame del) {
-		gameRepository.delete(del);
+		gameDao.delete(del);
 	}
 
 	@Override
 	public Optional<TsscGame> findById(long id) {
-		return gameRepository.findById(id);
+		return null;
 	}	
 }

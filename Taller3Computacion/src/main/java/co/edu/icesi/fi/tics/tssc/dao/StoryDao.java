@@ -19,12 +19,12 @@ public class StoryDao implements IStoryDao {
 	private EntityManager entityManager;
 
 	@Override
-	public void saveStory(TsscStory story) throws Exception {
+	public void save(TsscStory story) throws Exception {
 		entityManager.persist(story);		
 	}
 
 	@Override
-	public void editStory(TsscStory story) throws Exception {
+	public void edit(TsscStory story) throws Exception {
 		entityManager.merge(story);		
 	}
 	

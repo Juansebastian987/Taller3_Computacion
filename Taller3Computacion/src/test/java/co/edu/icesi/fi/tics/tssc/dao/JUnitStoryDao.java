@@ -49,8 +49,8 @@ class JUnitStoryDao {
 		tsscGame.setNSprints(10);
 
 		try {
-			iGameDao.saveGame(tsscGame);
-			iStoryDao.saveStory(tsscStory);
+			iGameDao.save(tsscGame);
+			iStoryDao.save(tsscStory);
 		} catch (Exception e) {
 			fail();
 		}
@@ -64,7 +64,7 @@ class JUnitStoryDao {
 	@DisplayName("Test Dao Save Story")
 	@Test
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-	public void testIntegrationSaveStory() throws Exception {
+	public void testSaveStory() throws Exception {
 		assertNotNull(iStoryDao);
 		iStoryDao.deleteAll();
 
@@ -72,11 +72,11 @@ class JUnitStoryDao {
 		tsscStory.setDescription("Descripcion");
 		
 		try {
-			iStoryDao.saveStory(tsscStory);
+			iStoryDao.save(tsscStory);
 			assertNotNull(iStoryDao.findById(tsscStory.getId()).get(0));
 			assertEquals("Descripcion", iStoryDao.findById(tsscStory.getId()).get(0).getAltDescripton());
 		} catch (Exception e) {
-			e.printStackTrace();
+			e.getStackTrace();
 		}
 	}
 
@@ -88,7 +88,7 @@ class JUnitStoryDao {
 	@DisplayName("Test Dao Edit Story")
 	@Test
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-	public void testIntegrationEditStory() throws Exception {
+	public void testEditStory() throws Exception {
 		assertNotNull(iStoryDao);
 		iStoryDao.deleteAll();
 		
@@ -98,8 +98,8 @@ class JUnitStoryDao {
 		TsscStory tsscStory2 = new TsscStory();
 		tsscStory2.setDescription("Description2");
 
-		iStoryDao.saveStory(tsscStory2);
-		iStoryDao.editStory(tsscStory);
+		iStoryDao.save(tsscStory2);
+		iStoryDao.edit(tsscStory);
 
 		assertNotNull(iGameDao.findByName("Description2"));
 		iStoryDao.delete(tsscStory);
@@ -144,10 +144,10 @@ class JUnitStoryDao {
 		tsscStory.setDescription("Description1");
 
 		try {
-			iStoryDao.saveStory(tsscStory);
+			iStoryDao.save(tsscStory);
 			assertNotEquals(0, iStoryDao.findById(tsscStory.getId()).get(0));
 		} catch (Exception e) {
-			e.printStackTrace();
+			e.getStackTrace();
 		}	
 	}
 

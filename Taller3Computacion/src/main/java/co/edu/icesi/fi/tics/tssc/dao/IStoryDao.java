@@ -7,8 +7,8 @@ import co.edu.icesi.fi.tics.tssc.model.TsscStory;
 import co.edu.icesi.fi.tics.tssc.model.TsscTopic;
 
 public interface IStoryDao {
-	public void saveStory(TsscStory story) throws Exception;
-	public void editStory(TsscStory story) throws Exception;
+	public void save(TsscStory story) throws Exception;
+	public void edit(TsscStory story) throws Exception;
 	public void delete(TsscStory del);
 	public List<TsscStory> findById(long id);
 	public void deleteAll();

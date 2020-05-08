@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
@@ -21,12 +22,12 @@ public class TopicDao implements ITopicDao{
 	private EntityManager entityManager;
 
 	@Override
-	public void saveTopic(TsscTopic topic) throws Exception {
+	public void save(TsscTopic topic) throws Exception {
 		entityManager.persist(topic);
 	}
 
 	@Override
-	public void editTopic(TsscTopic topic) throws Exception {
+	public void edit(TsscTopic topic) throws Exception {
 		entityManager.merge(topic);
 	}
 

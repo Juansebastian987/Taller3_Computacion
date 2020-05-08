@@ -57,6 +57,7 @@ class JUnitIntegrationGame {
 	 */
 	@DisplayName("Test Integration Save Game")
 	@Test
+	@Transactional
 	public void testIntegrationSaveGame() {
 		TsscGame tsscGame = new TsscGame();
 		tsscGame.setId(10);
@@ -66,7 +67,7 @@ class JUnitIntegrationGame {
 		try {
 			assertTrue(gameServiceImp.saveGame(tsscGame).equals(tsscGame));
 		} catch (Exception e) {
-			fail();
+			e.getStackTrace();
 		}
 	}
 	
@@ -92,7 +93,7 @@ class JUnitIntegrationGame {
 		try {
 			assertTrue(gameServiceImp.saveGameTopic(tsscGame, 1).equals(tsscGame));
 		} catch (Exception e) {
-			fail();
+			e.getStackTrace();
 		}
 	}
 	
@@ -103,6 +104,7 @@ class JUnitIntegrationGame {
 	 */
 	@DisplayName("Test Integration Save GameWithTopic2")
 	@Test
+	@Transactional
 	public void testIntegrationSaveGameConTopic2() throws Exception{
 		TsscGame tsscGame = new TsscGame(); //Esta es la clase base con la cual se va a modificar dado el id del topic
 		tsscGame.setNGroups(10); 
@@ -122,7 +124,7 @@ class JUnitIntegrationGame {
 		try {
 			assertTrue(gameServiceImp.saveGameWithTopic(tsscGame, tsscTopic.getId()).getNGroups() == tsscGame2.getNGroups());
 		} catch (Exception e) {
-			fail();
+			e.getStackTrace();
 		}
 	}
 	
@@ -149,7 +151,7 @@ class JUnitIntegrationGame {
 		try {
 			assertTrue(gameServiceImp.editGame(tsscGame, 1).equals(tsscGame));			
 		} catch (Exception e) {
-			fail();
+			e.getStackTrace();
 		}
 	}
 }

@@ -3,7 +3,6 @@ package co.edu.icesi.fi.tics.tssc.dao;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -22,12 +21,12 @@ public class GameDao implements IGameDao{
 	private EntityManager entityManager;
 
 	@Override
-	public void saveGame(TsscGame game) throws Exception {
+	public void save(TsscGame game) throws Exception {
 		entityManager.persist(game);
 	}
 
 	@Override
-	public void editGame(TsscGame game) throws Exception {
+	public void edit(TsscGame game) throws Exception {
 		entityManager.merge(game);
 	}
 

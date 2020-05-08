@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import co.edu.icesi.fi.tics.tssc.model.TsscGame;
-import co.edu.icesi.fi.tics.tssc.model.TsscStory;
 import co.edu.icesi.fi.tics.tssc.model.TsscTopic;
 
 @RunWith(SpringRunner.class)
@@ -42,7 +41,7 @@ class JUnitTopicDao {
 		tsscTopic.setDefaultGroups(10);
 		tsscTopic.setDefaultSprints(10);
 		try {
-			iTopicDao.saveTopic(tsscTopic);
+			iTopicDao.save(tsscTopic);
 		} catch (Exception e) {
 			fail();
 		}		
@@ -66,11 +65,11 @@ class JUnitTopicDao {
 		tsscTopic.setDescription("Description");
 		
 		try {
-			iTopicDao.saveTopic(tsscTopic);
+			iTopicDao.save(tsscTopic);
 			assertNotNull(iTopicDao.findById(tsscTopic.getId()).get(0));
 			assertEquals("Descripcion", iTopicDao.findById(tsscTopic.getId()));
 		} catch (Exception e) {
-			e.printStackTrace();
+			e.getStackTrace();
 		}
 		
 	}
@@ -99,8 +98,8 @@ class JUnitTopicDao {
 		tsscTopic2.setDefaultSprints(10);
 		tsscTopic2.setDescription("Description2");
 		
-		iTopicDao.saveTopic(tsscTopic2);
-		iTopicDao.editTopic(tsscTopic);
+		iTopicDao.save(tsscTopic2);
+		iTopicDao.edit(tsscTopic);
 
 		assertNotNull(iTopicDao.findByName("tsscTopic2"));
 		
@@ -147,10 +146,10 @@ class JUnitTopicDao {
 		tsscTopic.setDescription("Description");
 			
 		try {
-			iTopicDao.saveTopic(tsscTopic);
+			iTopicDao.save(tsscTopic);
 			assertNotEquals(0, iTopicDao.findById(tsscTopic.getId()).get(0));
 		} catch (Exception e) {
-			e.printStackTrace();
+			e.getStackTrace();
 		}	
 		
 	}
@@ -173,10 +172,10 @@ class JUnitTopicDao {
 		tsscTopic.setDescription("Description");
 		
 		try {
-			iTopicDao.saveTopic(tsscTopic);
+			iTopicDao.save(tsscTopic);
 			assertNotEquals(0, iTopicDao.findByName("TsscTopic").get(0));
 		} catch (Exception e) {
-			e.printStackTrace();
+			fail();
 		}	
 		
 	}
@@ -199,10 +198,10 @@ class JUnitTopicDao {
 		tsscTopic.setDescription("Description");
 		
 		try {
-			iTopicDao.saveTopic(tsscTopic);
+			iTopicDao.save(tsscTopic);
 			assertNotEquals(0, iTopicDao.findByDescription("Description").get(0));
 		} catch (Exception e) {
-			e.printStackTrace();
+			fail();
 		}
 	
 	}	
@@ -231,10 +230,10 @@ class JUnitTopicDao {
 		tsscGame.setScheduledDate(LocalDate.of(2020, 05, 05));
 		
 		try {
-			iGameDao.saveGame(tsscGame);
+			iGameDao.save(tsscGame);
 			assertNotNull(iGameDao.findByDate(LocalDate.of(2020, 01, 01), LocalDate.of(2020, 12, 12)).get(0));
 		} catch (Exception e) {
-			e.printStackTrace();
+			fail();
 		}
 		
 	}	

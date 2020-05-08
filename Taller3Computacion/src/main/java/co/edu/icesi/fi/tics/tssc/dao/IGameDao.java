@@ -8,8 +8,8 @@ import java.util.Optional;
 import co.edu.icesi.fi.tics.tssc.model.TsscGame;
 
 public interface IGameDao {
-	public void saveGame(TsscGame game) throws Exception;
-	public void editGame(TsscGame game) throws Exception;
+	public void save(TsscGame game) throws Exception;
+	public void edit(TsscGame game) throws Exception;
 	public void delete(TsscGame del);
 	public List<TsscGame> findById(long id);
 	public List<TsscGame> findByName(String name);
